@@ -1,12 +1,8 @@
 package com.task.tax.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -18,14 +14,19 @@ public class TollPrice {
      private LocalTime fromTime;
      private LocalTime toTime;
 
+
+     @ManyToOne
+     private City city;
+
      public TollPrice(){
      }
 
-    public TollPrice(Long id, BigDecimal price, LocalTime fromTime, LocalTime toTime) {
+    public TollPrice(Long id,City city, BigDecimal price, LocalTime fromTime, LocalTime toTime) {
         this.id = id;
         this.price = price;
         this.fromTime = fromTime;
         this.toTime = toTime;
+        this.city = city;
     }
 
     public Long getId() {
@@ -58,5 +59,14 @@ public class TollPrice {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 }

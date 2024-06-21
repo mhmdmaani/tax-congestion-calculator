@@ -1,8 +1,10 @@
 package com.task.tax.seed;
 
 import com.task.tax.model.Car;
+import com.task.tax.model.City;
 import com.task.tax.model.Entrance;
 import com.task.tax.repository.CarRepository;
+import com.task.tax.repository.CityRepository;
 import com.task.tax.repository.EntranceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -20,7 +22,7 @@ import java.util.stream.Stream;
 
 
 @Component
-@Order(5)
+@Order(6)
 public class EntranceSeeder implements CommandLineRunner {
 
     @Autowired
@@ -29,29 +31,34 @@ public class EntranceSeeder implements CommandLineRunner {
     @Autowired
     private CarRepository carRepository;
 
+    @Autowired
+    private CityRepository cityRepository;
+
     @Override
     public void run(String... args) throws Exception {
         List<Car> cars = carRepository.findAll();
+       // fetch city with name Gothenburg
+        City currentCity = cityRepository.findByName("Gothenburg");
 
         if (entranceRepository.count() == 0) {
             List<Entrance> entrances = cars.stream()
                     .flatMap(car -> Stream.of(
-                            new Entrance(null, car, LocalDateTime.of(2013, 1, 14, 21, 0)),
-                            new Entrance(null, car, LocalDateTime.of(2013, 1, 15, 21, 0)),
-                            new Entrance(null, car, LocalDateTime.of(2013, 2, 7, 6, 23, 27)),
-                            new Entrance(null, car, LocalDateTime.of(2013, 2, 7, 15, 27)),
-                            new Entrance(null, car, LocalDateTime.of(2013, 2, 8, 6, 27)),
-                            new Entrance(null, car, LocalDateTime.of(2013, 2, 8, 6, 20, 27)),
-                            new Entrance(null, car, LocalDateTime.of(2013, 2, 8, 14, 35)),
-                            new Entrance(null, car, LocalDateTime.of(2013, 2, 8, 15, 29)),
-                            new Entrance(null, car, LocalDateTime.of(2013, 2, 8, 15, 47)),
-                            new Entrance(null, car, LocalDateTime.of(2013, 2, 8, 16, 1)),
-                            new Entrance(null, car, LocalDateTime.of(2013, 2, 8, 16, 48)),
-                            new Entrance(null, car, LocalDateTime.of(2013, 2, 8, 17, 49)),
-                            new Entrance(null, car, LocalDateTime.of(2013, 2, 8, 18, 29)),
-                            new Entrance(null, car, LocalDateTime.of(2013, 2, 8, 18, 35)),
-                            new Entrance(null, car, LocalDateTime.of(2013, 3, 26, 14, 25)),
-                            new Entrance(null, car, LocalDateTime.of(2013, 3, 28, 14, 7, 27))
+                            new Entrance(null, car,currentCity, LocalDateTime.of(2013, 1, 14, 21, 0)),
+                            new Entrance(null, car,currentCity, LocalDateTime.of(2013, 1, 15, 21, 0)),
+                            new Entrance(null, car,currentCity, LocalDateTime.of(2013, 2, 7, 6, 23, 27)),
+                            new Entrance(null, car,currentCity, LocalDateTime.of(2013, 2, 7, 15, 27)),
+                            new Entrance(null, car,currentCity, LocalDateTime.of(2013, 2, 8, 6, 27)),
+                            new Entrance(null, car,currentCity, LocalDateTime.of(2013, 2, 8, 6, 20, 27)),
+                            new Entrance(null, car,currentCity, LocalDateTime.of(2013, 2, 8, 14, 35)),
+                            new Entrance(null, car,currentCity, LocalDateTime.of(2013, 2, 8, 15, 29)),
+                            new Entrance(null, car,currentCity, LocalDateTime.of(2013, 2, 8, 15, 47)),
+                            new Entrance(null, car,currentCity, LocalDateTime.of(2013, 2, 8, 16, 1)),
+                            new Entrance(null, car,currentCity, LocalDateTime.of(2013, 2, 8, 16, 48)),
+                            new Entrance(null, car,currentCity, LocalDateTime.of(2013, 2, 8, 17, 49)),
+                            new Entrance(null, car,currentCity, LocalDateTime.of(2013, 2, 8, 18, 29)),
+                            new Entrance(null, car,currentCity, LocalDateTime.of(2013, 2, 8, 18, 35)),
+                            new Entrance(null, car,currentCity, LocalDateTime.of(2013, 3, 26, 14, 25)),
+                            new Entrance(null, car, currentCity,LocalDateTime.of(2013, 3, 28, 14, 7, 27))
                     ))
                     .toList();
 

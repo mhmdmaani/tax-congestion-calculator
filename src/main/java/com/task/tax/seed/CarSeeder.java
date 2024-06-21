@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-@Order(4)
+@Order(5)
 public class CarSeeder implements CommandLineRunner {
 
     @Autowired

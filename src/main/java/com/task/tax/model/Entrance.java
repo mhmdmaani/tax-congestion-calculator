@@ -12,16 +12,20 @@ public class Entrance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private LocalDateTime entranceDateTime;
+
     @ManyToOne
     @JsonBackReference
     private Car car;
 
-    private LocalDateTime entranceDateTime;
+
+    @ManyToOne
+    private City city;
 
     public Entrance() {
     }
 
-    public Entrance(Long id, Car car, LocalDateTime entranceDateTime) {
+    public Entrance(Long id, Car car,City city, LocalDateTime entranceDateTime) {
         this.id = id;
         this.car = car;
         this.entranceDateTime = entranceDateTime;
@@ -50,4 +54,17 @@ public class Entrance {
     public void setEntranceDateTime(LocalDateTime entranceDateTime) {
         this.entranceDateTime = entranceDateTime;
     }
+
+
+    public City getCity() {
+        return city;
+    }
+
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+
+
 }

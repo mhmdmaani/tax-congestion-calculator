@@ -1,7 +1,10 @@
 package com.task.tax.controller;
 
 
+import com.task.tax.DTO.TollPriceInputDTO;
+import com.task.tax.model.City;
 import com.task.tax.model.TollPrice;
+import com.task.tax.repository.CityRepository;
 import com.task.tax.service.TollPriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,8 @@ import java.util.Optional;
 public class TollPriceController {
     @Autowired
     private TollPriceService tollPriceService;
+    @Autowired
+    private CityRepository cityRepository;
 
     @GetMapping
     public List<TollPrice> getAllTollPrices() {
@@ -27,20 +32,33 @@ public class TollPriceController {
     }
 
     @PostMapping
-    public TollPrice createTollPrice(@RequestBody TollPrice tollPrice) {
-        return tollPriceService.saveTollPrice(tollPrice);
+    public TollPrice createTollPrice(@RequestBody TollPriceInputDTO tollPrice) {
+          City city = cityRepository.findById(tollPrice.getCityId()).orElse(null);
+            if (city != null) {
+                TollPrice newTollPrice = new TollPrice();
+                newTollPrice.setCity(city);
+                newTollPrice.setFromTime(tollPrice.getFromTime());
+                newTollPrice.setToTime(tollPrice.getToTime());
+                newTollPrice.setPrice(tollPrice.getPrice());
+                return tollPriceService.saveTollPrice(newTollPrice);
+            } else {
+                return null;
+            }
+
     }
 
     @PutMapping("/{id}")
-    public TollPrice updateTollPrice(@PathVariable Long id, @RequestBody TollPrice tollPrice) {
+    public TollPrice updateTollPrice(@PathVariable Long id, @RequestBody TollPriceInputDTO tollPrice) {
         TollPrice existingTollPrice = tollPriceService.getTollPriceById(id);
-        if (existingTollPrice != null) {
+        City city = cityRepository.findById(tollPrice.getCityId()).orElse(null);
+        if (existingTollPrice != null && city != null) {
             existingTollPrice.setFromTime(tollPrice.getFromTime());
             existingTollPrice.setToTime(tollPrice.getToTime());
             existingTollPrice.setPrice(tollPrice.getPrice());
+            existingTollPrice.setCity(city);
             return tollPriceService.saveTollPrice(existingTollPrice);
         } else {
-            return null; // Or throw an exception
+            return null;
         }
     }
 

@@ -3,6 +3,7 @@ package com.task.tax.controller;
 
 import com.task.tax.DTO.TaxResponse;
 import com.task.tax.model.Car;
+import com.task.tax.model.City;
 import com.task.tax.model.Holiday;
 import com.task.tax.model.TollPrice;
 import com.task.tax.service.*;
@@ -29,7 +30,10 @@ public class TaxController {
     private HolidayService holidayService;
 
     @Autowired
-   private TollPriceService tollPriceService;
+     private TollPriceService tollPriceService;
+
+    @Autowired
+    CityService cityService;
 
      @GetMapping("/calculate/{carId}")
     public TaxResponse calculateTax(@PathVariable Long carId) {
@@ -40,7 +44,7 @@ public class TaxController {
          List <Holiday> holidays = holidayService.getAll();
         List<TollPrice> tollPrices = tollPriceService.getAllTollPrices();
 
-        return new TaxResponse(car.get(),taxService.calculateTax(car.get().getVehicleType(), car.get().getEntrances(), holidays, tollPrices).doubleValue());
+        return new TaxResponse(car.get(),taxService.calculateTax(null,car.get().getVehicleType(), car.get().getEntrances(), holidays, tollPrices).doubleValue());
      }
 
      @GetMapping("calculate/all")
@@ -48,7 +52,31 @@ public class TaxController {
          List<Car> cars = carService.getAll();
           List <Holiday> holidays = holidayService.getAll();
           List<TollPrice> tollPrices = tollPriceService.getAllTollPrices();
-          return cars.stream().map(car -> new TaxResponse(car,taxService.calculateTax(car.getVehicleType(), car.getEntrances(), holidays, tollPrices).doubleValue())).toList();
+          return cars.stream().map(car -> new TaxResponse(car,taxService.calculateTax(null,car.getVehicleType(), car.getEntrances(), holidays, tollPrices).doubleValue())).toList();
     }
+
+
+
+    @GetMapping("/city/{cityId}/{carId}")
+    public TaxResponse calculateTaxInCity(@PathVariable Long carId, @PathVariable Long cityId) {
+        Optional<Car> car = carService.getById(carId);
+        if (car.isEmpty()) {
+            throw  new RuntimeException("Car not found");
+        }
+        List <Holiday> holidays = holidayService.getAll();
+        City city = cityService.getCity(cityId);
+        List<TollPrice> tollPrices = city.getTollPrices();
+        return new TaxResponse(car.get(),taxService.calculateTax(null,car.get().getVehicleType(), car.get().getEntrances(), holidays, tollPrices).doubleValue());
+    }
+
+    @GetMapping("city/all/{cityId}")
+    public List<TaxResponse> getAllCarsTaxesInCity(@PathVariable Long cityId) {
+        List<Car> cars = carService.getAll();
+        List <Holiday> holidays = holidayService.getAll();
+        City city = cityService.getCity(cityId);
+        List<TollPrice> tollPrices = city.getTollPrices();
+        return cars.stream().map(car -> new TaxResponse(car,taxService.calculateTax(city.getDailyLimit(),car.getVehicleType(), car.getEntrances(), holidays, tollPrices).doubleValue())).toList();
+    }
+
 
 }

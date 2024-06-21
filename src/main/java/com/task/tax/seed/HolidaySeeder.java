@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Component
-@Order(1)
+@Order(2)
 public class HolidaySeeder implements CommandLineRunner {
     @Autowired
     private HolidayRepository holidayRepository;

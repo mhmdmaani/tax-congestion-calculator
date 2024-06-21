@@ -3,7 +3,6 @@ package com.task.tax.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jdk.jfr.Unsigned;
 
 import java.util.Set;
 
@@ -13,7 +12,6 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Unsigned
     private String regNumber;
 
     @ManyToOne
@@ -59,5 +57,9 @@ public class Car {
 
     public  Set<Entrance> getEntrances(){
         return this.entrances;
+    }
+
+    public void setEntrances(Set<Entrance> entrances){
+        this.entrances = entrances;
     }
 }

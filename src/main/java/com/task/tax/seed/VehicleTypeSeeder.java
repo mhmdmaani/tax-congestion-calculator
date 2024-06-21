@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Component
-@Order(3)
+@Order(4)
 public class VehicleTypeSeeder implements CommandLineRunner{
     @Autowired
     private VehicleTypeRepository vehicleTypeRepository;

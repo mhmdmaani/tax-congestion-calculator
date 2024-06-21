@@ -3,8 +3,10 @@ package com.task.tax.controller;
 
 import com.task.tax.DTO.EntranceInputDTO;
 import com.task.tax.model.Car;
+import com.task.tax.model.City;
 import com.task.tax.model.Entrance;
 import com.task.tax.service.CarService;
+import com.task.tax.service.CityService;
 import com.task.tax.service.EntranceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,12 @@ public class EntranceController {
     private EntranceService entranceService;
    @Autowired
     private CarService carService;
+   @Autowired
+    private CityService cityService;
+
+
+
+
     @GetMapping
     public List<Entrance> getAllEntrances() {
         return entranceService.getAllEntrances();
@@ -38,26 +46,30 @@ public class EntranceController {
     @PostMapping
     public Entrance createEntrance(@RequestBody EntranceInputDTO entrance) {
          Optional<Car> car = carService.getById(entrance.getCarId());
-         if (car.isPresent()) {
+         City city = cityService.getCity(entrance.getCityId());
+         if (car.isPresent() && city!=null) {
             Entrance newEntrance = new Entrance();
             newEntrance.setCar(car.get());
+            newEntrance.setCity(city);
             newEntrance.setEntranceDateTime(entrance.getEntranceDateTime());
             return entranceService.saveEntrance(newEntrance);
         } else {
-            return null; // Or throw an exception
+            return null;
          }
     }
 
     @PutMapping("/{id}")
     public Entrance updateEntrance(@PathVariable Long id, @RequestBody EntranceInputDTO entrance) {
         Entrance existingEntrance = entranceService.getEntranceById(id);
+        City city = cityService.getCity(entrance.getCityId());
         Car car = carService.getById(entrance.getCarId()).orElse(null);
-        if (existingEntrance != null && car!= null) {
+        if (existingEntrance != null && car!= null && city!=null) {
             existingEntrance.setCar(car);
+            existingEntrance.setCity(city);
             existingEntrance.setEntranceDateTime(entrance.getEntranceDateTime());
             return entranceService.saveEntrance(existingEntrance);
         } else {
-            return null; // Or throw an exception
+            return null;
         }
     }
 

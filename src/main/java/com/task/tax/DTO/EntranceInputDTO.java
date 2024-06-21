@@ -7,6 +7,7 @@ public class EntranceInputDTO {
 
     private Long carId;
     private LocalDateTime entranceDateTime;
+    private Long cityId;
 
     public Long getCarId() {
         return carId;
@@ -34,5 +35,13 @@ public class EntranceInputDTO {
     public EntranceInputDTO(Long carId, LocalDateTime entranceDateTime) {
         this.carId = carId;
         this.entranceDateTime = entranceDateTime;
+    }
+
+    public Long getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
     }
 }
