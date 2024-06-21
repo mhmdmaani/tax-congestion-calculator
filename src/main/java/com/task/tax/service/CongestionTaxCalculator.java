@@ -17,7 +17,6 @@ public class CongestionTaxCalculator {
    private static final BigDecimal DEFAULT_DAILY_LIMIT = new BigDecimal(60);
 
     public BigDecimal calculateTax(BigDecimal dailyLimit, VehicleType vehicleType, Set<Entrance> entrances, List<Holiday> holidays, List<TollPrice> tollPrices) {
-        BigDecimal DAILY_LIMIT = dailyLimit==null?DEFAULT_DAILY_LIMIT:dailyLimit;
         if (vehicleType.isFree()) return BigDecimal.ZERO;
         Map<LocalDate, List<LocalTime>> groupedSortedEntrancesDates = groupAndSortEntrancesByDate(new HashSet<>(entrances));
 
@@ -28,7 +27,7 @@ public class CongestionTaxCalculator {
             }
             totalFee = totalFee.add(calculateTollFeeForDay(entry.getValue(), tollPrices,dailyLimit));
         }
-        return totalFee.min(DAILY_LIMIT);
+        return totalFee;
     }
 
     private BigDecimal getTollFee(LocalTime currentTime, List<TollPrice> pricesList) {
