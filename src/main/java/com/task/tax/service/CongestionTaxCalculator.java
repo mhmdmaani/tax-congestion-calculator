@@ -28,7 +28,7 @@ public class CongestionTaxCalculator {
             }
             totalFee = totalFee.add(calculateTollFeeForDay(entry.getValue(), tollPrices));
         }
-        return totalFee.min(DAILY_LIMIT);
+        return totalFee;
     }
 
     private BigDecimal getTollFee(LocalTime currentTime, List<TollPrice> pricesList) {
