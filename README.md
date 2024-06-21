@@ -29,7 +29,7 @@ Tax Congestion Calculator is a Java Spring Boot application designed to calculat
    - Branches:
      - `main`: The main branch support Gothenburg city only.
      - `feat/multiple-cities`: branch supports multiple cities.
-     
+
 2. Build the project:
    ```sh
     mvn clean install
@@ -43,6 +43,10 @@ Tax Congestion Calculator is a Java Spring Boot application designed to calculat
    ```
     http://localhost:8080/swagger-ui.html
    ```
-
+6. API end point:
+ - Add new Entrance for car:
+ post: http://localhost:8080/entrances
+ - Calculation End point:
+    get: http://localhost:8080/tax/
 
      
